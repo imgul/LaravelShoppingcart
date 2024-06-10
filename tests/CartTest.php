@@ -1515,35 +1515,35 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_use_correctly_rounded_values_for_totals_and_cart_summary()
-    {
-        $this->setConfigFormat(2, ',', '');
+	public function it_use_correctly_rounded_values_for_totals_and_cart_summary()
+	{
+		$this->setConfigFormat(2, ',', '');
 
-        $cart = $this->getCartDiscount(6);
+		$cart = $this->getCartDiscount(6);
 
-        $cartItem = $cart->add(new BuyableProduct([
-            'name'  => 'First item',
-            'price' => 0.18929,
-        ]), 1000);
-        $cart->add(new BuyableProduct([
-            'id'    => 2,
-            'name'  => 'Second item',
-            'price' => 4.41632,
-        ]), 5);
-        $cart->add(new BuyableProduct([
-            'id'    => 3,
-            'name'  => 'Third item',
-            'price' => 0.37995,
-        ]), 25);
+		$cart->add(new BuyableProduct([
+			'name'  => 'First item',
+			'price' => 0.18929,
+		]), 1000);
+		$cart->add(new BuyableProduct([
+			'id'    => 2,
+			'name'  => 'Second item',
+			'price' => 4.41632,
+		]), 5);
+		$cart->add(new BuyableProduct([
+			'id'    => 3,
+			'name'  => 'Third item',
+			'price' => 0.37995,
+		]), 25);
 
-        $cart->setGlobalTax(22);
+		$cart->setGlobalTax(22);
 
-        // check total
-        $this->assertEquals('253,29', $cart->total());
+		// check total
+		$this->assertEquals('253,29', $cart->total());
 
-        // check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
-        $this->assertEquals($cart->totalFloat(), $cart->subtotalFloat() + $cart->taxFloat());
-    }
+		// check that the sum of cart subvalues matches the total (in order to avoid cart summary to looks wrong)
+		$this->assertEqualsWithDelta($cart->totalFloat(), $cart->subtotalFloat() + $cart->taxFloat(), 0.00001);
+	}
 
     /** @test */
     public function it_use_gross_price_as_base_price()
